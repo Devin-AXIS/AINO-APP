@@ -198,7 +198,7 @@ export function SendCodeButton({
   
   // 使用统一设计配置
   const { tokens } = useDesignTokens()
-  const secondaryColor = tokens?.colors?.secondary || '#6b7280'
+  const secondaryColor = tokens?.colors?.secondary?.500 || '#6b7280'
   const sendCodeButtonTextColor = getOptimalTextColor(secondaryColor, 'secondary')
 
   useEffect(() => {

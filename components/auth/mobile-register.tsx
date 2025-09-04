@@ -53,7 +53,7 @@ export function MobileRegister({
 
   // 使用统一设计配置
   const { tokens } = useDesignTokens()
-  const primaryColor = tokens?.colors?.primary || '#3b82f6'
+  const primaryColor = tokens?.colors?.primary?.500 || '#3b82f6'
   const registerButtonTextColor = getOptimalTextColor(primaryColor, 'primary')
 
   const handlePhoneChange = (value: string) => {

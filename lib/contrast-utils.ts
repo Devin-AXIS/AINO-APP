@@ -173,6 +173,12 @@ export function getOptimalTextColor(
   backgroundColor: string, 
   variant: 'primary' | 'secondary' | 'outline' | 'ghost' | 'default' = 'default'
 ): string {
+  // 类型检查：确保backgroundColor是字符串
+  if (typeof backgroundColor !== 'string') {
+    console.warn('getOptimalTextColor: backgroundColor must be a string, got:', typeof backgroundColor, backgroundColor)
+    return variant === 'primary' ? '#FFFFFF' : '#000000'
+  }
+  
   // 特殊变体的固定颜色规则
   if (variant === 'primary') {
     return '#FFFFFF' // 主按钮固定使用白色文字

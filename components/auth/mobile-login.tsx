@@ -48,7 +48,7 @@ export function MobileLogin({
 
   // 使用统一设计配置
   const { tokens } = useDesignTokens()
-  const primaryColor = tokens?.colors?.primary || '#3b82f6'
+  const primaryColor = tokens?.colors?.primary?.500 || '#3b82f6'
   const loginButtonTextColor = getOptimalTextColor(primaryColor, 'primary')
 
   const handlePhoneChange = (value: string) => {
