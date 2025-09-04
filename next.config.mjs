@@ -1,3 +1,9 @@
+import bundleAnalyzer from '@next/bundle-analyzer'
+
+const withBundleAnalyzer = bundleAnalyzer({
+  enabled: process.env.ANALYZE === 'true',
+})
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   eslint: {
@@ -6,14 +12,26 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
+  // 启用图片优化 - 性能优化
   images: {
-    unoptimized: true,
+    domains: ['localhost'],
+    formats: ['image/webp', 'image/avif'],
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
   },
-  // 解决 vendor chunks 问题
+  // 性能优化配置
   experimental: {
-    optimizePackageImports: [],
-    webpackBuildWorker: false
-  }
+    optimizePackageImports: ['@radix-ui/react-icons', 'lucide-react'],
+    webpackBuildWorker: false,
+  },
+  // 启用 SWC 压缩（Next.js 15 中默认启用）
+  swcMinify: true,
+  // 压缩配置
+  compress: true,
+  // 启用静态优化
+  trailingSlash: false,
+  // 优化构建输出
+  output: 'standalone',
 }
 
-export default nextConfig
+export default withBundleAnalyzer(nextConfig)
