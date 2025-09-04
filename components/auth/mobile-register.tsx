@@ -8,6 +8,9 @@ import { VerificationCodeInput, SendCodeButton } from './verification-code-input
 import { AppCard } from '@/components/layout/app-card'
 import { AppHeader } from '@/components/navigation/app-header'
 import { Button } from '@/components/ui/button'
+import { SmartButton } from '@/components/ui/smart-button'
+import { useDesignTokens } from '@/components/providers/design-tokens-provider'
+import { getOptimalTextColor } from '@/lib/contrast-utils'
 import { TextInput } from '@/components/input/text-input'
 
 interface MobileRegisterProps {
@@ -47,6 +50,11 @@ export function MobileRegister({
     confirmPassword?: string
     agreeTerms?: string
   }>({})
+
+  // 使用统一设计配置
+  const { tokens } = useDesignTokens()
+  const primaryColor = tokens?.colors?.primary || '#3b82f6'
+  const registerButtonTextColor = getOptimalTextColor(primaryColor, 'primary')
 
   const handlePhoneChange = (value: string) => {
     setPhone(value)
@@ -198,14 +206,16 @@ export function MobileRegister({
         </div>
       </div>
 
-      <Button
+      <SmartButton
         type="button"
         onClick={handleNext}
         size="lg"
         className="w-full"
+        customBackgroundColor={primaryColor}
+        customTextColor={registerButtonTextColor}
       >
         下一步
-      </Button>
+      </SmartButton>
     </>
   )
 
@@ -334,12 +344,14 @@ export function MobileRegister({
         )}
       </div>
 
-      <Button
+      <SmartButton
         type="button"
         onClick={handleNext}
         disabled={isLoading}
         size="lg"
         className="w-full"
+        customBackgroundColor={primaryColor}
+        customTextColor={registerButtonTextColor}
       >
         {isLoading ? (
           <>
@@ -349,7 +361,7 @@ export function MobileRegister({
         ) : (
           '完成注册'
         )}
-      </Button>
+      </SmartButton>
     </>
   )
 

@@ -4,6 +4,9 @@ import React, { useState, useRef, useEffect } from 'react'
 import { cn } from '@/lib/utils'
 import { Shield, Check, AlertCircle, RefreshCw } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { SmartButton } from '@/components/ui/smart-button'
+import { useDesignTokens } from '@/components/providers/design-tokens-provider'
+import { getOptimalTextColor } from '@/lib/contrast-utils'
 
 interface VerificationCodeInputProps {
   value: string
@@ -192,6 +195,11 @@ export function SendCodeButton({
   className
 }: SendCodeButtonProps) {
   const [timeLeft, setTimeLeft] = useState(countdown)
+  
+  // 使用统一设计配置
+  const { tokens } = useDesignTokens()
+  const secondaryColor = tokens?.colors?.secondary || '#6b7280'
+  const sendCodeButtonTextColor = getOptimalTextColor(secondaryColor, 'secondary')
 
   useEffect(() => {
     if (timeLeft > 0) {
@@ -210,13 +218,15 @@ export function SendCodeButton({
   const isDisabled = disabled || loading || timeLeft > 0
 
   return (
-    <Button
+    <SmartButton
       type="button"
       onClick={handleClick}
       disabled={isDisabled}
       variant="outline"
       size="default"
       className={cn("hover:scale-105 disabled:hover:scale-100", className)}
+      customBackgroundColor={secondaryColor}
+      customTextColor={sendCodeButtonTextColor}
     >
       {loading ? (
         <>
@@ -226,11 +236,11 @@ export function SendCodeButton({
       ) : timeLeft > 0 ? (
         <>
           重新发送
-          <span className="text-primary font-bold">({timeLeft}s)</span>
+          <span className="font-bold">({timeLeft}s)</span>
         </>
       ) : (
         '发送验证码'
       )}
-    </Button>
+    </SmartButton>
   )
 }

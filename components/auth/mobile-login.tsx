@@ -8,7 +8,10 @@ import { VerificationCodeInput, SendCodeButton } from './verification-code-input
 import { AppCard } from '@/components/layout/app-card'
 import { AppHeader } from '@/components/navigation/app-header'
 import { Button } from '@/components/ui/button'
+import { SmartButton } from '@/components/ui/smart-button'
 import { TextInput } from '@/components/input/text-input'
+import { useDesignTokens } from '@/components/providers/design-tokens-provider'
+import { getOptimalTextColor } from '@/lib/contrast-utils'
 
 interface MobileLoginProps {
   onLogin?: (data: LoginData) => void
@@ -42,6 +45,11 @@ export function MobileLogin({
     code?: string
     password?: string
   }>({})
+
+  // 使用统一设计配置
+  const { tokens } = useDesignTokens()
+  const primaryColor = tokens?.colors?.primary || '#3b82f6'
+  const loginButtonTextColor = getOptimalTextColor(primaryColor, 'primary')
 
   const handlePhoneChange = (value: string) => {
     setPhone(value)
@@ -226,13 +234,15 @@ export function MobileLogin({
                 </div>
               )}
 
-              {/* 登录按钮 */}
-              <Button
+              {/* 登录按钮 - 使用智能对比度 */}
+              <SmartButton
                 type="button"
                 onClick={handleLogin}
                 disabled={isLoading}
                 size="lg"
                 className="w-full"
+                customBackgroundColor={primaryColor}
+                customTextColor={loginButtonTextColor}
               >
                 {isLoading ? (
                   <>
@@ -242,7 +252,7 @@ export function MobileLogin({
                 ) : (
                   '登录'
                 )}
-              </Button>
+              </SmartButton>
 
               {/* 其他操作 */}
               <div className="mt-6 space-y-4">
