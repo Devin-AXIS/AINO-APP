@@ -35,9 +35,24 @@ export function DesignTokensProvider({ children }: { children: ReactNode }) {
     updateCSSVariablesFromTokens(tokens, colorTokenPaths)
   }, [tokens])
 
-  // 更新设计令牌
+  // 更新设计令牌 - 使用深度合并
   const updateTokens = (updates: Partial<DesignTokens>) => {
-    const newTokens = { ...tokens, ...updates }
+    // 深度合并函数
+    const deepMerge = (target: any, source: any): any => {
+      const result = { ...target }
+      
+      for (const key in source) {
+        if (source[key] && typeof source[key] === 'object' && !Array.isArray(source[key])) {
+          result[key] = deepMerge(target[key] || {}, source[key])
+        } else {
+          result[key] = source[key]
+        }
+      }
+      
+      return result
+    }
+    
+    const newTokens = deepMerge(tokens, updates)
     setTokens(newTokens)
     
     // 自动同步颜色相关的更新到CSS变量

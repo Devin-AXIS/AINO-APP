@@ -72,55 +72,18 @@ export function RadiusConfig() {
     }
   }, [config.radius])
 
-  // 处理预设切换
+  // 处理预设切换 - 简化版本
   const handlePresetChange = (presetKey: string) => {
     setSelectedPreset(presetKey)
     config.radius.setActivePreset(presetKey)
     
-    // 立即应用CSS变量到DOM
-    config.radius.applyRadiusToDOM()
-    
-    // 强制重新应用边角到现有组件 - 多重保障
+    // 添加视觉反馈
+    document.body.style.setProperty('--force-radius-update', '1')
     setTimeout(() => {
-      // 触发全局边角更新事件
-      window.dispatchEvent(new CustomEvent('forceRadiusUpdate'))
-      
-      // 强制重新应用边角到现有组件
-      config.radius.applyRadiusToDOM()
-      
-      // 添加视觉反馈
-      document.body.style.setProperty('--force-radius-update', '1')
-      setTimeout(() => {
-        document.body.style.removeProperty('--force-radius-update')
-      }, 100)
-      
-      // 强制刷新页面上的所有相关元素
-      const forceRefreshElements = () => {
-        const elements = document.querySelectorAll('.rounded-sm, .rounded, .rounded-md, .rounded-lg, .rounded-xl, .rounded-2xl, .rounded-3xl, .rounded-full, button, input, textarea, select, [class*="card"], [class*="Card"], [class*="modal"], [class*="Modal"]')
-        
-        elements.forEach(el => {
-          if (el instanceof HTMLElement) {
-            // 强制重新计算样式
-            el.style.transform = 'translateZ(0)'
-            el.offsetHeight // 触发重排
-            el.style.transform = ''
-          }
-        })
-      }
-      
-      // 延迟执行强制刷新
-      setTimeout(forceRefreshElements, 100)
-      
-      // 如果是切换到默认预设，额外确保配置正确应用
-      if (presetKey === 'default') {
-        setTimeout(() => {
-          config.radius.applyRadiusToDOM()
-          console.log('🎯 默认预设额外确认应用')
-        }, 200)
-      }
-      
-      console.log('🔄 边角预设已切换:', presetKey)
+      document.body.style.removeProperty('--force-radius-update')
     }, 100)
+    
+    console.log('🔄 边角预设已切换:', presetKey)
   }
 
   // 手动更新"默认"预设为当前状态

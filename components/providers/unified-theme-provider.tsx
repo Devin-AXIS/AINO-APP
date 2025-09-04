@@ -68,11 +68,12 @@ export function UnifiedThemeProvider({ children }: { children: ReactNode }) {
     document.documentElement.style.setProperty('--font-color-heading', fontColors.heading)
     document.documentElement.style.setProperty('--font-color-body', fontColors.body)
     
-    // 更新全局字体颜色样式
+    // 更新全局字体颜色样式 - 智能处理按钮文字颜色
     const styleElement = document.getElementById('unified-font-color-style') || createFontColorStyleElement()
     styleElement.textContent = `
       h1, h2, h3, h4, h5, h6, .font-heading { color: ${fontColors.heading} !important; }
-      body, p, span, div, button, input, textarea, .font-body { color: ${fontColors.body} !important; }
+      body, p, span, div, input, textarea, .font-body { color: ${fontColors.body} !important; }
+      /* 按钮文字颜色由智能对比度系统处理，不强制使用正文颜色 */
     `
   }, [])
 
@@ -83,17 +84,61 @@ export function UnifiedThemeProvider({ children }: { children: ReactNode }) {
     document.documentElement.style.setProperty('--component-secondary', colors.secondary)
     document.documentElement.style.setProperty('--component-danger', colors.danger)
     
-    // 更新组件样式
+    // 智能计算按钮文字颜色
+    const getOptimalTextColor = (bgColor: string) => {
+      // 简单的亮度计算
+      const hex = bgColor.replace('#', '')
+      const r = parseInt(hex.substring(0, 2), 16)
+      const g = parseInt(hex.substring(2, 4), 16)
+      const b = parseInt(hex.substring(4, 6), 16)
+      const brightness = (r * 299 + g * 587 + b * 114) / 1000
+      return brightness > 128 ? '#000000' : '#FFFFFF'
+    }
+    
+    const primaryTextColor = getOptimalTextColor(colors.primary)
+    const secondaryTextColor = getOptimalTextColor(colors.secondary)
+    const dangerTextColor = getOptimalTextColor(colors.danger)
+    
+    // 更新组件样式 - 包含智能文字颜色
     const styleElement = document.getElementById('unified-component-style') || createComponentStyleElement()
     styleElement.textContent = `
-      .btn-primary { background-color: ${colors.primary} !important; }
-      .btn-secondary { background-color: ${colors.secondary} !important; }
-      .btn-danger { background-color: ${colors.danger} !important; }
+      .btn-primary { 
+        background-color: ${colors.primary} !important; 
+        color: ${primaryTextColor} !important; 
+      }
+      .btn-secondary { 
+        background-color: ${colors.secondary} !important; 
+        color: ${secondaryTextColor} !important; 
+      }
+      .btn-danger { 
+        background-color: ${colors.danger} !important; 
+        color: ${dangerTextColor} !important; 
+      }
+      /* 智能按钮文字颜色 */
+      [data-smart-button="primary"] { 
+        background-color: ${colors.primary} !important; 
+        color: ${primaryTextColor} !important; 
+      }
+      [data-smart-button="secondary"] { 
+        background-color: ${colors.secondary} !important; 
+        color: ${secondaryTextColor} !important; 
+      }
+      [data-smart-button="danger"] { 
+        background-color: ${colors.danger} !important; 
+        color: ${dangerTextColor} !important; 
+      }
     `
     
     // 通知其他Provider更新组件颜色
     const componentColorUpdateEvent = new CustomEvent('unified-theme-component-colors-updated', {
-      detail: colors
+      detail: {
+        ...colors,
+        textColors: {
+          primary: primaryTextColor,
+          secondary: secondaryTextColor,
+          danger: dangerTextColor
+        }
+      }
     })
     window.dispatchEvent(componentColorUpdateEvent)
   }, [])

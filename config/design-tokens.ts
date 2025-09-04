@@ -150,16 +150,16 @@ export const defaultDesignTokens: DesignTokens = {
   globalRadius: {
     // 当前激活的边角预设
     active: "default", // 默认使用默认预设
-    // 边角预设配置
+    // 边角预设配置 - 精简为4个预设
     presets: {
-      sharp: {
-        name: "锐利",
-        description: "无圆角，现代简洁风格",
+      default: {
+        name: "默认",
+        description: "页面刷新后的真实初始状态",
         values: {
-          card: "none",
-          button: "none",
-          input: "none",
-          modal: "none"
+          card: "full",
+          button: "full", 
+          input: "full",
+          modal: "full"
         }
       },
       subtle: {
@@ -172,18 +172,8 @@ export const defaultDesignTokens: DesignTokens = {
           modal: "sm"
         }
       },
-      balanced: {
-        name: "平衡",
-        description: "适中圆角，经典平衡",
-        values: {
-          card: "md",
-          button: "md",
-          input: "md",
-          modal: "md"
-        }
-      },
       rounded: {
-        name: "圆润",
+        name: "圆角",
         description: "明显圆角，友好亲和",
         values: {
           card: "lg",
@@ -200,16 +190,6 @@ export const defaultDesignTokens: DesignTokens = {
           button: "xl",
           input: "xl",
           modal: "xl"
-        }
-      },
-      default: {
-        name: "默认",
-        description: "当前默认的圆润边角配置",
-        values: {
-          card: "lg",
-          button: "lg",
-          input: "lg",
-          modal: "lg"
         }
       }
     }
