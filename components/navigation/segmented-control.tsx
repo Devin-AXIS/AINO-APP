@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion"
 import { cn } from "@/lib/utils"
 import type React from "react"
 import { useChartTheme } from "@/components/providers/unified-chart-theme-provider"
+import { getOptimalTextColor } from "@/lib/contrast-utils"
 
 interface SegmentedControlOption {
   id: string
@@ -19,21 +20,14 @@ interface SegmentedControlProps {
   className?: string
 }
 
-function getContrastColor(hexColor: string): string {
-  if (!hexColor.startsWith("#")) return "#000000"
-  const r = Number.parseInt(hexColor.slice(1, 3), 16)
-  const g = Number.parseInt(hexColor.slice(3, 5), 16)
-  const b = Number.parseInt(hexColor.slice(5, 7), 16)
-  const yiq = (r * 299 + g * 587 + b * 114) / 1000
-  return yiq >= 128 ? "#000000" : "#ffffff"
-}
+// 移除自定义对比度函数，使用统一的智能对比度工具
 
 export function SegmentedControl({ options, value, onChange, className }: SegmentedControlProps) {
   // 根据value找到对应的索引
   const activeIndex = options.findIndex(option => option.id === value)
   const { palette } = useChartTheme()
   const primaryColor = palette[0] || "#000000"
-  const textColorForPrimary = useMemo(() => getContrastColor(primaryColor), [primaryColor])
+  const textColorForPrimary = useMemo(() => getOptimalTextColor(primaryColor, 'primary'), [primaryColor])
 
   // 处理点击事件
   const handleClick = (optionId: string) => {

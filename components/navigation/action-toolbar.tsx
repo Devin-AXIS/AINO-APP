@@ -15,20 +15,14 @@ import { Button } from "@/components/ui/button"
 import { Compass, Layers, Bell, ChevronUp } from "lucide-react"
 import { useMemo } from "react"
 import { useChartTheme } from "@/components/providers/unified-chart-theme-provider"
+import { getOptimalTextColor } from "@/lib/contrast-utils"
 
-function getContrastColor(hexColor: string): string {
-  if (!hexColor.startsWith("#")) return "hsl(var(--foreground))"
-  const r = parseInt(hexColor.slice(1, 3), 16)
-  const g = parseInt(hexColor.slice(3, 5), 16)
-  const b = parseInt(hexColor.slice(5, 7), 16)
-  const yiq = (r * 299 + g * 587 + b * 114) / 1000
-  return yiq >= 128 ? "hsl(var(--foreground))" : "hsl(var(--background))"
-}
+// 移除自定义对比度函数，使用统一的智能对比度工具
 
 export function ActionToolbar() {
   const { palette } = useChartTheme()
   const primaryColor = palette[0] || "#000000"
-  const textColorForPrimary = useMemo(() => getContrastColor(primaryColor), [primaryColor])
+  const textColorForPrimary = useMemo(() => getOptimalTextColor(primaryColor, 'primary'), [primaryColor])
 
   return (
     <div className="flex items-center space-x-2">
