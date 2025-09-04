@@ -1,0 +1,32 @@
+{
+  "bottomNav": {
+    "browseComponents": "组件浏览",
+    "dashboard": "仪表盘",
+    "chat": "对话",
+    "search": "搜索",
+    "profile": "个人"
+  },
+  "profilePage": {
+    "title": "个人中心",
+    "name": "iPollo 用户",
+    "id": "ID: 12345678",
+    "followers": "关注者",
+    "following": "正在关注",
+    "posts": "帖子",
+    "myPoints": "我的积分",
+    "pointsToday": "今日获得",
+    "redeem": "兑换",
+    "getPoints": "获取积分",
+    "toolbar": "工具栏",
+    "personalProfile": "个人档案",
+    "helpCenter": "帮助",
+    "customerService": "客服",
+    "settings": "设置",
+    "details": "明细"
+  },
+  "chatPage": {
+    "title": "AI 对话",
+    "inputPlaceholder": "问我任何问题...",
+    "initialMessage": "你好！我是你的 AI 助手。今天有什么可以帮你的吗？"
+  }
+}
