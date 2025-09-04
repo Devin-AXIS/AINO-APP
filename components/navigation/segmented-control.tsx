@@ -28,6 +28,7 @@ export function SegmentedControl({ options, value, onChange, className }: Segmen
   const { palette } = useChartTheme()
   const primaryColor = palette[0] || "#000000"
   const textColorForPrimary = useMemo(() => getOptimalTextColor(primaryColor, 'primary'), [primaryColor])
+  const textColorForInactive = useMemo(() => getOptimalTextColor('#e5e7eb', 'secondary'), [])
 
   // 处理点击事件
   const handleClick = (optionId: string) => {
@@ -46,14 +47,16 @@ export function SegmentedControl({ options, value, onChange, className }: Segmen
           onClick={() => handleClick(option.id)}
           className={cn(
             "relative flex items-center justify-center px-4 py-2 rounded-full transition-colors duration-300 focus:outline-none",
-            activeIndex === index ? "" : "text-gray-600 hover:bg-black/5",
+            activeIndex === index ? "" : "hover:bg-black/5",
           )}
           style={
             activeIndex === index
               ? {
                   color: textColorForPrimary,
                 }
-              : {}
+              : {
+                  color: textColorForInactive,
+                }
           }
         >
           {activeIndex === index && (

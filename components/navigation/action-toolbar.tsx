@@ -55,7 +55,8 @@ export function ActionToolbar() {
       <Button
         variant="ghost"
         size="icon"
-        className="rounded-full w-10 h-10 bg-gray-100/80 text-gray-600 hover:bg-gray-200/80"
+        className="rounded-full w-10 h-10 bg-gray-100/80 hover:bg-gray-200/80"
+        style={{ color: getOptimalTextColor('#f3f4f6', 'secondary') }}
       >
         <Layers className="w-5 h-5" />
       </Button>
@@ -63,7 +64,8 @@ export function ActionToolbar() {
       <Button
         variant="ghost"
         size="icon"
-        className="rounded-full w-10 h-10 bg-gray-100/80 text-gray-600 hover:bg-gray-200/80"
+        className="rounded-full w-10 h-10 bg-gray-100/80 hover:bg-gray-200/80"
+        style={{ color: getOptimalTextColor('#f3f4f6', 'secondary') }}
       >
         <Bell className="w-5 h-5" />
       </Button>
