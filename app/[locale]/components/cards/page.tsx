@@ -134,25 +134,22 @@ export default function CardsPage({ params }: CardsPageProps) {
                   className="bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden"
                   style={{ border: `1px solid ${theme.titleColor}15` }}
                 >
-                  {/* 卡片内容 - 直接显示，不做任何包装 */}
+                  {/* 卡片内容 - 显示占位符，避免渲染问题 */}
                   <div className="p-4">
-                    {card.component ? (
-                      // 如果有真实组件，直接渲染
-                      <card.component />
-                    ) : (
-                      // 如果没有组件，显示简洁的占位符
-                      <div 
-                        className="h-40 rounded-lg flex items-center justify-center"
-                        style={{ backgroundColor: `${theme.background}20` }}
-                      >
-                        <div className="text-center">
-                          <div className="w-16 h-16 mx-auto mb-3 rounded-lg" style={{ backgroundColor: `${theme.titleColor}20` }} />
-                          <p className="text-sm" style={{ color: theme.titleColor }}>
-                            无组件
-                          </p>
-                        </div>
+                    <div 
+                      className="h-40 rounded-lg flex items-center justify-center"
+                      style={{ backgroundColor: `${theme.background}20` }}
+                    >
+                      <div className="text-center">
+                        <div className="w-16 h-16 mx-auto mb-3 rounded-lg" style={{ backgroundColor: `${theme.titleColor}20` }} />
+                        <p className="text-sm" style={{ color: theme.titleColor }}>
+                          {card.displayName || card.name}
+                        </p>
+                        <p className="text-xs mt-1" style={{ color: theme.textColor }}>
+                          {card.category} - {card.type}
+                        </p>
                       </div>
-                    )}
+                    </div>
                   </div>
 
                   {/* 底部信息 - 只显示版本号和类型分类 */}

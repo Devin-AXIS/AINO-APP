@@ -21,6 +21,8 @@ export interface BaseCardProps {
   onAction?: (action: string, data?: any) => void
   // 为局部主题持久化提供唯一键（建议来自卡片 id）
   localThemeKey?: string
+  // 设备类型属性
+  deviceType?: 'universal' | 'mobile' | 'pc'
 }
 
 /**

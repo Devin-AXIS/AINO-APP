@@ -4,8 +4,11 @@ import type React from "react"
 import { useParams } from "next/navigation"
 import Link from "next/link"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { User, HelpCircle, Headphones, Settings, Gift, PlusCircle } from "lucide-react"
+import { User, HelpCircle, Headphones, Settings, Gift, PlusCircle, LogIn, UserPlus, Crown, Sparkles } from "lucide-react"
 import { AppCard } from "@/components/layout/app-card"
+import { AuthAvatar } from "@/components/auth/auth-avatar"
+import { useAuth } from "@/hooks/use-auth"
+import { Button } from "@/components/ui/button"
 
 interface ProfileClientViewProps {
   dict: {
@@ -29,6 +32,7 @@ interface ProfileClientViewProps {
 
 export function ProfileClientView({ dict }: ProfileClientViewProps) {
   const { locale } = useParams()
+  const { user, isAuthenticated, logout } = useAuth()
 
   const StatItem = ({ value, label }: { value: string; label: string }) => (
     <div className="text-center">
@@ -52,32 +56,100 @@ export function ProfileClientView({ dict }: ProfileClientViewProps) {
     </Link>
   )
 
+  // 未登录状态显示
+  if (!isAuthenticated) {
+    return (
+      <main className="p-4 space-y-6">
+        {/* 未登录提示 */}
+        <AppCard className="p-6 text-center">
+          <div className="flex flex-col items-center space-y-4">
+            <div className="w-20 h-20 bg-gradient-to-br from-blue-100 to-purple-100 rounded-full flex items-center justify-center">
+              <User className="w-10 h-10 text-blue-500" />
+            </div>
+            <div>
+              <h3 className="text-lg font-bold text-gray-900 mb-2">欢迎使用 AINO</h3>
+              <p className="text-sm text-gray-600 mb-4">请登录或注册以享受完整功能</p>
+            </div>
+            <div className="flex space-x-3">
+              <Button 
+                onClick={() => window.location.href = '/auth/login'}
+                className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700"
+              >
+                <LogIn className="w-4 h-4 mr-2" />
+                登录
+              </Button>
+              <Button 
+                variant="outline"
+                onClick={() => window.location.href = '/auth/register'}
+                className="border-blue-500 text-blue-500 hover:bg-blue-50"
+              >
+                <UserPlus className="w-4 h-4 mr-2" />
+                注册
+              </Button>
+            </div>
+          </div>
+        </AppCard>
+
+        {/* 功能预览 */}
+        <AppCard className="p-5">
+          <h4 className="text-sm font-medium mb-4" style={{ color: "var(--card-title-color)" }}>
+            功能预览
+          </h4>
+          <div className="grid grid-cols-2 gap-4">
+            <div className="text-center p-3 bg-gray-50 rounded-lg">
+              <Sparkles className="w-6 h-6 text-yellow-500 mx-auto mb-2" />
+              <p className="text-xs text-gray-600">积分系统</p>
+            </div>
+            <div className="text-center p-3 bg-gray-50 rounded-lg">
+              <Crown className="w-6 h-6 text-orange-500 mx-auto mb-2" />
+              <p className="text-xs text-gray-600">VIP特权</p>
+            </div>
+            <div className="text-center p-3 bg-gray-50 rounded-lg">
+              <User className="w-6 h-6 text-blue-500 mx-auto mb-2" />
+              <p className="text-xs text-gray-600">个人资料</p>
+            </div>
+            <div className="text-center p-3 bg-gray-50 rounded-lg">
+              <Settings className="w-6 h-6 text-gray-500 mx-auto mb-2" />
+              <p className="text-xs text-gray-600">设置中心</p>
+            </div>
+          </div>
+        </AppCard>
+      </main>
+    )
+  }
+
   return (
     <main className="p-4 space-y-6">
       {/* Top User Avatar & Info */}
       <div className="flex items-center gap-4 p-2">
-        <Link href={`/${locale}/profile/edit`}>
-          <Avatar className="w-14 h-14 border-2 border-white shadow-md cursor-pointer hover:opacity-80 transition-opacity">
-            <AvatarImage src="/generic-user-avatar.png" alt="User Avatar" />
-            <AvatarFallback>U</AvatarFallback>
-          </Avatar>
-        </Link>
-        <div>
-          <h3 className="text-lg font-bold text-gray-900" style={{ color: "var(--card-title-color)" }}>
-            {dict.name}
-          </h3>
+        <AuthAvatar size="lg" showDropdown={true} />
+        <div className="flex-1">
+          <div className="flex items-center space-x-2">
+            <h3 className="text-lg font-bold text-gray-900" style={{ color: "var(--card-title-color)" }}>
+              {user?.name || dict.name}
+            </h3>
+            {user?.points && user.points > 1000 && (
+              <Crown className="w-5 h-5 text-yellow-500" />
+            )}
+          </div>
           <p className="text-xs text-gray-500" style={{ color: "var(--card-text-color)" }}>
-            {dict.id}
+            {user?.phone || dict.id}
           </p>
+          <div className="flex items-center space-x-1 mt-1">
+            <Sparkles className="w-3 h-3 text-yellow-500" />
+            <span className="text-xs text-gray-600">
+              {user?.points} 积分
+            </span>
+          </div>
         </div>
       </div>
 
       {/* Abstract Stats */}
       <AppCard>
         <div className="flex justify-around items-center py-4">
-          <StatItem value="22" label={dict.followers} />
-          <StatItem value="334" label={dict.following} />
-          <StatItem value="3434" label={dict.posts} />
+          <StatItem value={user?.followers?.toString() || "0"} label={dict.followers} />
+          <StatItem value={user?.following?.toString() || "0"} label={dict.following} />
+          <StatItem value={user?.posts?.toString() || "0"} label={dict.posts} />
         </div>
       </AppCard>
 
@@ -89,7 +161,7 @@ export function ProfileClientView({ dict }: ProfileClientViewProps) {
               {dict.myPoints}
             </h4>
             <p className="text-3xl font-bold mt-1" style={{ color: "var(--card-title-color)" }}>
-              2,323
+              {user?.points?.toLocaleString() || "0"}
             </p>
           </div>
           <div className="text-right">
@@ -97,7 +169,7 @@ export function ProfileClientView({ dict }: ProfileClientViewProps) {
               {dict.details}
             </Link>
             <p className="text-xs mt-4" style={{ color: "var(--card-text-color)" }}>
-              {dict.pointsToday}: <span className="font-semibold text-green-500">233+</span>
+              {dict.pointsToday}: <span className="font-semibold text-green-500">+{Math.floor(Math.random() * 100)}</span>
             </p>
           </div>
         </div>

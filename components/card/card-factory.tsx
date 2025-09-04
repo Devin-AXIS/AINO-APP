@@ -13,6 +13,8 @@ export interface CardFactoryProps {
   children?: React.ReactNode
   // 强制的卡片约束
   disableConstraints?: boolean
+  // 设备类型属性
+  deviceType?: 'universal' | 'mobile' | 'pc'
 }
 
 /**
@@ -30,11 +32,13 @@ export function CardFactory({
   onAction,
   children,
   disableConstraints = false,
+  deviceType = 'universal',
 }: CardFactoryProps) {
   const cardConstraints = {
     isDraggable: !disableConstraints,
     showSettings: !disableConstraints,
     disableLocalTheme: disableConstraints,
+    deviceType,
   }
 
   if (type === "business" && cardName) {

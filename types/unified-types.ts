@@ -5,11 +5,16 @@
 
 import type React from "react"
 
+// 设备类型定义
+export type DeviceType = 'universal' | 'mobile' | 'pc'
+
 // 基础类型
 export type BaseProps = {
   className?: string
   style?: React.CSSProperties
   children?: React.ReactNode
+  // 设备类型属性
+  deviceType?: DeviceType
 }
 
 export type WithId = {
@@ -36,8 +41,13 @@ export type WithThemeControl = {
   disableLocalTheme?: boolean
 }
 
+// 设备类型相关类型
+export type WithDeviceType = {
+  deviceType?: DeviceType
+}
+
 // 组件基础类型
-export type ComponentProps = BaseProps & WithId & WithLocale & WithAction & WithThemeControl
+export type ComponentProps = BaseProps & WithId & WithLocale & WithAction & WithThemeControl & WithDeviceType
 
 // 样式相关类型
 export type StyleVariant = 'default' | 'primary' | 'secondary' | 'outline' | 'ghost' | 'destructive'

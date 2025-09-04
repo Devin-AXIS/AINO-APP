@@ -21,6 +21,7 @@ interface CourseData {
 
 interface CourseCardProps extends BusinessCardProps {
   data: CourseData
+  deviceType?: 'universal' | 'mobile' | 'pc'
 }
 
 export function CourseCard({ data, onAction, ...props }: CourseCardProps) {

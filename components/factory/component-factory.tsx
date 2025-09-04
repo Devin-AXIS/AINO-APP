@@ -5,7 +5,8 @@
 
 import React from "react"
 import { cn, getVariantStyles, getSizeStyles, getComponentBaseStyles } from "@/lib/style-utils"
-import type { BaseProps, ComponentProps } from "@/types/common-props"
+import type { BaseProps, ComponentProps } from "@/types/unified-types"
+import { isDeviceCompatible, detectCurrentDeviceType } from "@/lib/device-utils"
 
 // 组件工厂配置
 export interface ComponentFactoryConfig {
@@ -25,8 +26,15 @@ export function createComponentFactory<T extends BaseProps>(
       className,
       variant = config.defaultVariant,
       size = config.defaultSize,
+      deviceType = 'universal',
       ...restProps
-    } = props as T & { variant?: string; size?: string }
+    } = props as T & { variant?: string; size?: string; deviceType?: string }
+
+    // 检查设备兼容性
+    const currentDeviceType = detectCurrentDeviceType()
+    if (!isDeviceCompatible(deviceType as any, currentDeviceType)) {
+      return null // 不兼容的设备类型不渲染
+    }
 
     // 构建样式类名
     const styles = cn(

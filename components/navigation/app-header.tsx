@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import { cn } from "@/lib/utils"
 import { ChevronLeft, MoreHorizontal } from "lucide-react"
 import { useRouter } from "next/navigation"
+import { AuthAvatar } from "@/components/auth/auth-avatar"
 
 interface AppHeaderProps {
   title: string
@@ -54,6 +55,7 @@ export function AppHeader({ title, showBackButton = false, className }: AppHeade
 
       {/* Right side buttons */}
       <div className="flex-1 flex justify-end items-center space-x-1">
+        <AuthAvatar size="sm" showDropdown={true} />
         <button
           className={cn("p-2 rounded-full hover:bg-gray-100/50 transition-opacity duration-300", {
             "opacity-100": isScrolled,
